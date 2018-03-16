@@ -1,11 +1,11 @@
-package edu.ouhk.comps380f.controller;
+package ouhk.comps380f.controller;
 
 import javax.servlet.*;
 import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
-import edu.ouhk.comps380f.model.Ticket;
+import ouhk.comps380f.model.Ticket;
 
 @WebServlet(
         name = "ticketServlet",

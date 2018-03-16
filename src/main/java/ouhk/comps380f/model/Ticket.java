@@ -1,4 +1,4 @@
-package edu.ouhk.comps380f.model;
+package ouhk.comps380f.model;
 
 public class Ticket {
 
