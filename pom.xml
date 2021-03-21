@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ouhk.comps380f</groupId>
-    <artifactId>Lab06</artifactId>
+    <artifactId>Lab05</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Lab06</name>
+    <name>Lab05</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
