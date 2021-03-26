@@ -4,11 +4,10 @@
         <title>Customer Support</title>
     </head>
     <body>
+        <a href="<c:url value="/login?logout" />">Logout</a>
         <h2>Create a Ticket</h2>
         <form method="POST" action="tickets" enctype="multipart/form-data">
             <input type="hidden" name="action" value="create"/>
-            Customer Name<br/>
-            <input type="text" name="customerName"><br/><br/>
             Subject<br/>
             <input type="text" name="subject"><br/><br/>
             Body<br/>

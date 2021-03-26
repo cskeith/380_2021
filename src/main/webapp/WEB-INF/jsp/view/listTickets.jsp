@@ -4,6 +4,7 @@
         <title>Customer Support</title>
     </head>
     <body>
+        <a href="<c:url value="/login?logout" />">Logout</a>
         <h2>Tickets</h2>
         <a href="<c:url value="/tickets">
             <c:param name="action" value="create" />
