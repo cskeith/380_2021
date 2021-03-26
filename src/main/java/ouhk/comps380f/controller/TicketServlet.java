@@ -5,12 +5,18 @@ import javax.servlet.annotation.*;
 import javax.servlet.http.*;
 import java.io.*;
 import java.util.*;
+import ouhk.comps380f.model.Attachment;
 import ouhk.comps380f.model.Ticket;
 
 @WebServlet(
         name = "ticketServlet",
         urlPatterns = {"/tickets"},
         loadOnStartup = 1
+)
+@MultipartConfig(
+        fileSizeThreshold = 5_242_880, //5MB
+        maxFileSize = 20_971_520L, //20MB
+        maxRequestSize = 41_943_040L //40MB
 )
 public class TicketServlet extends HttpServlet {
 
@@ -31,6 +37,9 @@ public class TicketServlet extends HttpServlet {
                 break;
             case "view":
                 this.viewTicket(request, response);
+                break;
+            case "download":
+                this.downloadAttachment(request, response);
                 break;
             case "list":
             default:
@@ -94,6 +103,14 @@ public class TicketServlet extends HttpServlet {
         ticket.setSubject(request.getParameter("subject"));
         ticket.setBody(request.getParameter("body"));
 
+        Part filePart = request.getPart("file1");
+        if (filePart != null && filePart.getSize() > 0) {
+            Attachment attachment = this.processAttachment(filePart);
+            if (attachment != null) {
+                ticket.addAttachment(attachment);
+            }
+        }
+
         int id;
         synchronized (this) {
             id = this.TICKET_ID_SEQUENCE++;
@@ -101,6 +118,25 @@ public class TicketServlet extends HttpServlet {
         }
 
         response.sendRedirect("tickets?action=view&ticketId=" + id);
+    }
+
+    private Attachment processAttachment(Part filePart)
+            throws IOException {
+        InputStream inputStream = filePart.getInputStream();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+        int read;
+        final byte[] bytes = new byte[1024];
+
+        while ((read = inputStream.read(bytes)) != -1) {
+            outputStream.write(bytes, 0, read);
+        }
+
+        Attachment attachment = new Attachment();
+        attachment.setName(filePart.getSubmittedFileName());
+        attachment.setContents(outputStream.toByteArray());
+
+        return attachment;
     }
 
     private Ticket getTicket(String idString, HttpServletResponse response)
@@ -121,5 +157,34 @@ public class TicketServlet extends HttpServlet {
             response.sendRedirect("tickets");
             return null;
         }
+    }
+
+    private void downloadAttachment(HttpServletRequest request,
+            HttpServletResponse response)
+            throws ServletException, IOException {
+        String idString = request.getParameter("ticketId");
+        Ticket ticket = this.getTicket(idString, response);
+        if (ticket == null) {
+            return;
+        }
+
+        String name = request.getParameter("attachment");
+        if (name == null) {
+            response.sendRedirect("tickets?action=view&ticketId=" + idString);
+            return;
+        }
+
+        Attachment attachment = ticket.getAttachment(name);
+        if (attachment == null) {
+            response.sendRedirect("tickets?action=view&ticketId=" + idString);
+            return;
+        }
+
+        response.setHeader("Content-Disposition",
+                "attachment; filename=" + attachment.getName());
+        response.setContentType("application/octet-stream");
+
+        ServletOutputStream stream = response.getOutputStream();
+        stream.write(attachment.getContents());
     }
 }
