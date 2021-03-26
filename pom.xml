@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ouhk.comps380f</groupId>
-    <artifactId>Lab07</artifactId>
+    <artifactId>Lab06</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>Lab07</name>
+    <name>Lab06</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -52,6 +52,12 @@
                     <artifactId>jstl-api</artifactId> 
                 </exclusion> 
             </exclusions> 
+        </dependency>
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
+            <version>3.0.0</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
