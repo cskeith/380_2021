@@ -16,7 +16,15 @@
         <b:property name="password" value="nbuser" />
     </b:bean> 
 
-    <http />
+    <http auto-config="true">
+        <intercept-url pattern="/ticket/delete/**" access="hasRole('ADMIN')" /> 
+        <intercept-url pattern="/ticket/**" access="hasAnyRole('USER','ADMIN')" />
+        <form-login login-page="/login" authentication-failure-url="/login?error" />
+        <logout logout-success-url="/login?logout"
+                invalidate-session="true"
+                delete-cookies="JSESSIONID" />
+        <remember-me key="custSupportSecret" token-validity-seconds="86400" />
+    </http>
 
     <authentication-manager>
         <authentication-provider>
