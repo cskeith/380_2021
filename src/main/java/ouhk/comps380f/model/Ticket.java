@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.Map;
 
 public class Ticket implements Serializable {
+
     private long id;
     private String customerName;
     private String subject;
@@ -43,7 +44,7 @@ public class Ticket implements Serializable {
     public void setBody(String body) {
         this.body = body;
     }
-    
+
     public Attachment getAttachment(String name) {
         return this.attachments.get(name);
     }
@@ -59,5 +60,12 @@ public class Ticket implements Serializable {
     public int getNumberOfAttachments() {
         return this.attachments.size();
     }
-}
 
+    public boolean hasAttachment(String name) {
+        return this.attachments.containsKey(name);
+    }
+
+    public Attachment deleteAttachment(String name) {
+        return this.attachments.remove(name);
+    }
+}

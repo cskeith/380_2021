@@ -5,6 +5,8 @@
 </head>
 <body>
 <h2>Ticket #${ticketId}: <c:out value="${ticket.subject}" /></h2>
+[<a href="<c:url value="/ticket/edit/${ticketId}" />">Edit</a>]
+[<a href="<c:url value="/ticket/delete/${ticketId}" />">Delete</a>]<br /><br />
 <i>Customer Name - <c:out value="${ticket.customerName}" /></i><br /><br />
 <c:out value="${ticket.body}" /><br /><br />
 <c:if test="${ticket.numberOfAttachments > 0}">
