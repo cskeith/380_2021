@@ -12,7 +12,7 @@
           http://www.springframework.org/schema/mvc/spring-mvc.xsd
 ">
 
-    <context:component-scan base-package="ouhk.comps380f.controller" />
+    <context:component-scan base-package="ouhk.comps380f.controller, ouhk.comps380f.service" />
     <mvc:annotation-driven />
 
     <bean id="multipartResolver"     

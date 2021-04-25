@@ -19,18 +19,19 @@
         <i>There are no tickets in the system.</i>
     </c:when>
     <c:otherwise>
-        <c:forEach items="${ticketDatabase}" var="entry">
-            Ticket ${entry.key}:
-            <a href="<c:url value="/ticket/view/${entry.key}" />">
-               <c:out value="${entry.value.subject}" /></a>
-            (customer: <c:out value="${entry.value.customerName}" />)
-            <security:authorize access="hasRole('ADMIN') or principal.username=='${entry.value.customerName}'">
-                [<a href="<c:url value="/ticket/edit/${entry.key}" />">Edit</a>]
+        <c:forEach items="${ticketDatabase}" var="ticket">
+            Ticket ${ticket.id}:
+            <a href="<c:url value="/ticket/view/${ticket.id}" />">
+                <c:out value="${ticket.subject}" /></a>
+            (customer: <c:out value="${ticket.customerName}" />)
+            <security:authorize access="hasRole('ADMIN') or
+                                principal.username=='${ticket.customerName}'">
+                [<a href="<c:url value="/ticket/edit/${ticket.id}" />">Edit</a>]
             </security:authorize>
-            <security:authorize access="hasRole('ADMIN')">
-                [<a href="<c:url value="/ticket/delete/${entry.key}" />">Delete</a>]
-            </security:authorize>            
-            <br />
+            <security:authorize access="hasRole('ADMIN')">            
+                [<a href="<c:url value="/ticket/delete/${ticket.id}" />">Delete</a>]
+            </security:authorize>
+            <br /><br />
         </c:forEach>
     </c:otherwise>
 </c:choose>
