@@ -2,11 +2,20 @@
 <b:beans xmlns:b="http://www.springframework.org/schema/beans"
          xmlns="http://www.springframework.org/schema/security"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:context="http://www.springframework.org/schema/context"
+         xmlns:tx="http://www.springframework.org/schema/tx"
+         xmlns:jpa="http://www.springframework.org/schema/data/jpa"
 
          xsi:schemaLocation="http://www.springframework.org/schema/beans 
             http://www.springframework.org/schema/beans/spring-beans.xsd
             http://www.springframework.org/schema/security 
             http://www.springframework.org/schema/security/spring-security.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/data/jpa
+            http://www.springframework.org/schema/data/jpa/spring-jpa.xsd   
 ">
     <b:bean id="dataSource"
             class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -26,13 +35,44 @@
         <remember-me key="custSupportSecret" token-validity-seconds="86400" />
     </http>
 
+    <context:annotation-config />
+
+    <b:bean id="ticketUserService" class="ouhk.comps380f.service.TicketUserService" />
+
     <authentication-manager>
-        <authentication-provider>
-            <jdbc-user-service data-source-ref="dataSource"
-                               users-by-username-query=
-            "SELECT username, password, true FROM users WHERE username=?"
-                               authorities-by-username-query=
-            "SELECT username, role FROM user_roles WHERE username=?" />
-        </authentication-provider>        
+        <authentication-provider user-service-ref="ticketUserService" />
     </authentication-manager>
+    
+    
+    <!-- Create default configuration for Hibernate -->
+    <b:bean id="hibernateJpaVendorAdapter"
+            class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+
+    <!-- Configure the transaction manager bean -->
+    <b:bean id="transactionManager"
+            class="org.springframework.orm.jpa.JpaTransactionManager">
+        <b:property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </b:bean>
+
+    <!-- Enable annotation driven transaction management -->
+    <tx:annotation-driven/>
+
+    <!-- Configure base package of the repository interfaces -->
+    <jpa:repositories base-package="ouhk.comps380f.dao"/>
+
+    <!-- Configure the entity manager factory bean -->
+    <b:bean id="entityManagerFactory"
+            class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <b:property name="dataSource" ref="dataSource"/>
+        <b:property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter"/>
+        <!-- Set JPA properties -->
+        <b:property name="jpaProperties">
+            <b:props>
+                <b:prop key="hibernate.dialect">org.hibernate.dialect.DerbyDialect</b:prop>
+                <b:prop key="hibernate.show_sql">true</b:prop>
+            </b:props>
+        </b:property>
+        <!-- Set base package of your entities -->
+        <b:property name="packagesToScan" value="ouhk.comps380f.model"/>
+    </b:bean>
 </b:beans>
