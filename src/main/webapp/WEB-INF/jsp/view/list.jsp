@@ -10,6 +10,9 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 </form>
 <h2>Tickets</h2>
+<security:authorize access="hasRole('ADMIN')"> 
+    <a href="<c:url value="/user" />">Manage User Accounts</a><br /><br />
+</security:authorize>
 <a href="<c:url value="/ticket/create" />">Create a Ticket</a><br /><br />
 <c:choose>
     <c:when test="${fn:length(ticketDatabase) == 0}">
