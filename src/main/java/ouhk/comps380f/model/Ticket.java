@@ -2,7 +2,7 @@ package ouhk.comps380f.model;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 
 public class Ticket implements Serializable {
@@ -11,8 +11,21 @@ public class Ticket implements Serializable {
     private String customerName;
     private String subject;
     private String body;
-    private Map<String, Attachment> attachments = new Hashtable<>();
+    private final Map<String, Attachment> attachments = new HashMap<>();
 
+    public void addAttachment(Attachment attachment) {
+        this.attachments.put(attachment.getName(), attachment);
+    }
+
+    public Collection<Attachment> getAttachments() {
+        return this.attachments.values();
+    }
+
+    public int getNumberOfAttachments() {
+        return this.attachments.size();
+    }
+
+    // getters and setters of all properties except attachments
     public long getId() {
         return id;
     }
@@ -43,29 +56,5 @@ public class Ticket implements Serializable {
 
     public void setBody(String body) {
         this.body = body;
-    }
-
-    public Attachment getAttachment(String name) {
-        return this.attachments.get(name);
-    }
-
-    public Collection<Attachment> getAttachments() {
-        return this.attachments.values();
-    }
-
-    public void addAttachment(Attachment attachment) {
-        this.attachments.put(attachment.getName(), attachment);
-    }
-
-    public int getNumberOfAttachments() {
-        return this.attachments.size();
-    }
-
-    public boolean hasAttachment(String name) {
-        return this.attachments.containsKey(name);
-    }
-
-    public Attachment deleteAttachment(String name) {
-        return this.attachments.remove(name);
     }
 }
