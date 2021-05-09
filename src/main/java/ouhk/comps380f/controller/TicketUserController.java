@@ -22,10 +22,14 @@ import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 import ouhk.comps380f.dao.TicketUserRepository;
 import ouhk.comps380f.model.TicketUser;
+import ouhk.comps380f.validator.UserValidator;
 
 @Controller
 @RequestMapping("/user")
 public class TicketUserController {
+
+    @Autowired
+    private UserValidator userValidator;
 
     private final Logger logger = LogManager.getLogger(this.getClass());
 
@@ -97,6 +101,8 @@ public class TicketUserController {
     @PostMapping("/create")
     public String create(@ModelAttribute("ticketUser") @Valid Form form,
             BindingResult result) throws IOException {
+        userValidator.validate(form, result);
+
         if (result.hasErrors()) {
             return "addUser";
         }

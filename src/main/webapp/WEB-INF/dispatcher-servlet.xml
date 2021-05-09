@@ -22,5 +22,7 @@
           class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
         <property name="prefix" value="/WEB-INF/jsp/view/" />
         <property name="suffix" value=".jsp" />
-    </bean>   
+    </bean>
+    
+    <bean id="userValidator" class="ouhk.comps380f.validator.UserValidator" />
 </beans>
